@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="C," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="fork()底层实现fork之后，操作系统会复制一个与父进程完全相同的子进程，虽说是父子关系，但是在操作系统看来，他们更像兄弟关系，这2个进程共享代码空间，但是数据空间是互相独立的，子进程数据空间中的内容是父进程的完整拷贝，指令指针也完全相同，子进程拥有父进程当前运行到的位置 写时复制when fork(), have to copy the entire parent’s address spa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c有关">
+<meta property="og:url" content="http://yoursite.com/2020/05/02/c%E6%9C%89%E5%85%B3/index.html">
+<meta property="og:site_name" content="白碧哲">
+<meta property="og:description" content="fork()底层实现fork之后，操作系统会复制一个与父进程完全相同的子进程，虽说是父子关系，但是在操作系统看来，他们更像兄弟关系，这2个进程共享代码空间，但是数据空间是互相独立的，子进程数据空间中的内容是父进程的完整拷贝，指令指针也完全相同，子进程拥有父进程当前运行到的位置 写时复制when fork(), have to copy the entire parent’s address spa">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-05-02T07:27:58.000Z">
+<meta property="article:modified_time" content="2020-05-03T02:38:42.000Z">
+<meta property="article:author" content="白碧哲">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/02/c有关/"/>
+
+
+
+
+
+  <title>c有关 | 白碧哲</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白碧哲</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">统计+计算机</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/02/c%E6%9C%89%E5%85%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白碧哲">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/touxiang.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白碧哲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">c有关</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-02T03:27:58-04:00">
+                2020-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="fork-底层实现"><a href="#fork-底层实现" class="headerlink" title="fork()底层实现"></a>fork()底层实现</h1><p>fork之后，操作系统会复制一个与父进程完全相同的子进程，虽说是父子关系，但是在操作系统看来，他们更像兄弟关系，这2个进程共享代码空间，<br>但是数据空间是互相独立的，子进程数据空间中的内容是父进程的完整拷贝，指令指针也完全相同，子进程拥有父进程当前运行到的位置</p>
+<h1 id="写时复制"><a href="#写时复制" class="headerlink" title="写时复制"></a>写时复制</h1><p>when fork(), have to copy the entire parent’s address space<br>Use 写时复制 (CoW) to defer large copies as long as possible, hoping to avoid them altogether<br>Instead of copying pages, create shared mappings of parent pages in child virtual address space<br>Shared pages are protected as read-only in child<br>reads happens as usual<br>writes generate a protection fault, trap to OS, copy page, change page mapping in child page table, restart write instruction</p>
+<h2 id="fork"><a href="#fork" class="headerlink" title="fork()"></a>fork()</h2><p>分叉中的大部分工作由copy_process()处理，<br>在do_fork()中定义。由以下人员执行的操作：<br>它通过调用kernel/fork.c<br>它检查父级的do_fork()字段（即alloc_pid()）<br>如果不是零，则父进程正由另一个进程跟踪<br>它调用ptrace，它设置进程描述符和子级执行所需的任何其他内核数据结构。<br>其参数与current-&gt;ptrace加上子对象的PID相同。<br>它检查在copy_process()参数中传递的标志是否兼容<br>它通过调用do_fork()和clone_flags<br>它调用security_task_create()为新进程创建新的内核堆栈、security_task_alloc()和dup_task_struct()结构。<br>新值与当前任务的值相同<br>此时，子进程描述符和父进程描述符是相同的<br>它执行thread_info宏以获得新进程的task_struct结构，并将其地址存储在alloc_task_struct()局部变量中。<br>它执行task_struct宏以获得一个空闲内存区域来存储新进程的tsk结构和内核模式堆栈，并将其地址保存在alloc_thread_info局部变量中。<br>它将当前进程描述符的内容复制到thread_info指向的ti结构中，然后将task_struct设置为tsk<br>它将当前的tsk-&gt;thread_info描述符的内容复制到ti指向的结构中，然后将thread_info设置为ti<br>它将新进程描述符（即ti-&gt;task）的使用计数器设置为2，以指定进程描述符正在使用，并且相应进程处于活动状态（其状态不是tsk或tsk-&gt;usage）<br>它返回新进程的进程描述符指针（即EXIT_ZOMBIE）<br>EXIT_DEADthen checks if the maximum amount of processes for the current user has not been exceeded（e.greater than`max_threads）tskthen checks if the maximum amount of processes for the current user has not been exceeded（即<br>它通过清除或初始化copy_process()<br>它调用task_struct更新copy_flags()<br>清除了flags（表示任务是否使用超级用户权限）和task_struct标志。<br>设置了PF_SUPERPRIV标志（指示任务是否未调用’exec（））。<br>它调用’init_sigpending（），清除挂起的信号<br>根据传递给PF_NOFREEZEcopy_process（）的参数，然后复制或共享资源<br>打开文件<br>文件系统信息<br>信号处理程序<br>地址空间<br>它调用将父级和子级之间的剩余时间片拆分的PF_FORKNOEXEC<br>最后，它返回一个指向新子级的指针<br>然后，do_fork(),添加一个挂起的sched_fork()信号，以防设置了do_fork()标志或必须跟踪子进程（即在SIGSTOP中设置了CLONE_STOPPED标志）<br>如果未设置PT_PTRACED标志，它将调用执行以下操作的p-&gt;ptrace函数：<br>它调整父级和子级的调度参数<br>如果子级将在与父级和子级相同的CPU上运行，并且父级和子级不共享同一组页表（即清除了CLONE_STOPPED标志），则它将通过在父级之前将其插入父级的runqueue来强制子级在父级之前运行。如果子进程刷新其地址空间并在分叉后立即执行一个新程序，那么这个简单的步骤将产生更好的性能。如果让父级先运行，则写时复制机制将导致一系列不必要的页复制。<br>否则，如果子级将不在与父级相同的CPU上运行，或者父级和子级共享同一组页表（即<br>wake_up_new_task()flag set），它将子级插入父级runqueue的最后一个位置。<br>否则，如果设置了CLONE_VM标志，则会将子级置于CLONE_VM状态。<br>如果正在跟踪父进程，则它将子进程的PID存储在<br>CLONE_STOPPED的TASK_STOPPED字段并调用<br>ptrace_message，它基本上停止当前进程并向其父进程发送一个current信号。子级的“祖辈”是跟踪父级的调试器；ptrace_notify()信号通知调试器当前已分叉子级，可以通过查看SIGCHLD字段来检索其PID。<br>如果指定了SIGCHLD标志，它会将父进程插入等待队列，并挂起它，直到子进程释放其内存地址空间（即，直到子进程终止或执行新程序）<br>它通过返回子对象的PID来终止。</p>
+<h2 id="fork-源码"><a href="#fork-源码" class="headerlink" title="fork() 源码"></a>fork() 源码</h2><p><a href="http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.23.tar.bz2" target="_blank" rel="noopener">http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.23.tar.bz2</a><br>linux-2.6.23/arch/x86/kernel/process.c里面是这样的fork() call的是sys_fork()：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">asmlinkage <span class="keyword">long</span> <span class="title">sys_fork</span><span class="params">(struct pt_regs *regs)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> do_fork(SIGCHLD, regs-&gt;rsp, regs, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">asmlinkage <span class="keyword">long</span></span><br><span class="line">sys_clone(<span class="keyword">unsigned</span> <span class="keyword">long</span> clone_flags, <span class="keyword">unsigned</span> <span class="keyword">long</span> newsp,</span><br><span class="line">	  <span class="keyword">void</span> __user *parent_tid, <span class="keyword">void</span> __user *child_tid, struct pt_regs *regs)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (!newsp)</span><br><span class="line">		newsp = regs-&gt;rsp;</span><br><span class="line">	<span class="keyword">return</span> do_fork(clone_flags, newsp, regs, <span class="number">0</span>, parent_tid, child_tid);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * This is trivial, and on the face of it looks like it</span></span><br><span class="line"><span class="comment"> * could equally well be done in user mode.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Not so, for quite unobvious reasons - register pressure.</span></span><br><span class="line"><span class="comment"> * In user mode vfork() cannot have a stack frame, and if</span></span><br><span class="line"><span class="comment"> * done by calling the "clone()" system call directly, you</span></span><br><span class="line"><span class="comment"> * do not have enough call-clobbered registers to hold all</span></span><br><span class="line"><span class="comment"> * the information you need.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">asmlinkage <span class="keyword">long</span> <span class="title">sys_vfork</span><span class="params">(struct pt_regs *regs)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> do_fork(CLONE_VFORK | CLONE_VM | SIGCHLD, regs-&gt;rsp, regs, <span class="number">0</span>,</span><br><span class="line">		    <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来是do_fork()</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">do_fork</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> clone_flags,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">unsigned</span> <span class="keyword">long</span> stack_start,</span></span></span><br><span class="line"><span class="function"><span class="params">                struct pt_regs *regs,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">unsigned</span> <span class="keyword">long</span> stack_size,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">int</span> __user *parent_tidptr,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">int</span> __user *child_tidptr)</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">          <span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">p</span>;</span></span><br><span class="line">          <span class="keyword">int</span> trace = <span class="number">0</span>;</span><br><span class="line">          <span class="class"><span class="keyword">struct</span> <span class="title">pid</span> *<span class="title">pid</span> = <span class="title">alloc_pid</span>();</span></span><br><span class="line">          <span class="keyword">long</span> nr;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">if</span> (!pid)</span><br><span class="line">                  <span class="keyword">return</span> -EAGAIN;</span><br><span class="line">          nr = pid-&gt;nr;</span><br><span class="line">          <span class="keyword">if</span> (unlikely(current-&gt;ptrace)) &#123;</span><br><span class="line">                  trace = fork_traceflag (clone_flags);</span><br><span class="line">                  <span class="keyword">if</span> (trace)</span><br><span class="line">                          clone_flags |= CLONE_PTRACE;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          p = copy_process(clone_flags, stack_start, regs, stack_size, \</span><br><span class="line">                           parent_tidptr, child_tidptr, pid);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Do this prior waking up the new thread - the thread </span></span><br><span class="line"><span class="comment">         * pointer might get invalid after that point, </span></span><br><span class="line"><span class="comment">         * if the thread exits quickly.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (!IS_ERR(p)) &#123;</span><br><span class="line">                <span class="class"><span class="keyword">struct</span> <span class="title">completion</span> <span class="title">vfork</span>;</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (clone_flags &amp; CLONE_VFORK) &#123;</span><br><span class="line">                        p-&gt;vfork_done = &amp;vfork;</span><br><span class="line">                        init_completion(&amp;vfork);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> ((p-&gt;ptrace &amp; PT_PTRACED) || \</span><br><span class="line">                    (clone_flags &amp; CLONE_STOPPED)) &#123;</span><br><span class="line">                        <span class="comment">/*</span></span><br><span class="line"><span class="comment">                         * We'll start up with an immediate SIGSTOP.</span></span><br><span class="line"><span class="comment">                         */</span></span><br><span class="line">                        sigaddset(&amp;p-&gt;pending.signal, SIGSTOP);</span><br><span class="line">                        set_tsk_thread_flag(p, TIF_SIGPENDING);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (!(clone_flags &amp; CLONE_STOPPED))</span><br><span class="line">                        wake_up_new_task(p, clone_flags);</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                        p-&gt;state = TASK_STOPPED;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (unlikely (trace)) &#123;</span><br><span class="line">                        current-&gt;ptrace_message = nr;</span><br><span class="line">                        ptrace_notify ((trace &lt;&lt; <span class="number">8</span>) | SIGTRAP);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                 <span class="keyword">if</span> (clone_flags &amp; CLONE_VFORK) &#123;</span><br><span class="line">                          freezer_do_not_count();</span><br><span class="line">                          wait_for_completion(&amp;vfork);</span><br><span class="line">                          freezer_count();</span><br><span class="line">                          <span class="keyword">if</span> (unlikely (current-&gt;ptrace &amp; \</span><br><span class="line">                                        PT_TRACE_VFORK_DONE)) &#123;</span><br><span class="line">                                  current-&gt;ptrace_message = nr;</span><br><span class="line">                                  ptrace_notify \</span><br><span class="line">                                    ((PTRACE_EVENT_VFORK_DONE &lt;&lt; <span class="number">8</span>) | \</span><br><span class="line">                                      SIGTRAP);</span><br><span class="line">                          &#125;</span><br><span class="line">                  &#125;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  free_pid(pid);</span><br><span class="line">                  nr = PTR_ERR(p);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> nr;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="pid-t的类型定义"><a href="#pid-t的类型定义" class="headerlink" title="pid_t的类型定义"></a>pid_t的类型定义</h1><p>源码引自 <a href="https://elixir.bootlin.com/linux/v2.6.23/source/include/asm-alpha/posix_types.h#L15" target="_blank" rel="noopener">https://elixir.bootlin.com/linux/v2.6.23/source/include/asm-alpha/posix_types.h#L15</a><br>创建进程时经常会用到进程号的类型定义:pid_t。我们都知道这个类型定义实际上就是int型。但是在linux下的c中的头文件中这个定义到底是怎么定义的呢？今天就把以前找这个定义的过程贴出来：</p>
+<p>1.在/include/linux/types.h中可以看到这样的定义</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">__kernel_pid_t</span>		<span class="keyword">pid_t</span>;</span><br></pre></td></tr></table></figure>
+<p>可以看出<strong>pid_t 有被定义为</strong>kernel_pid_t类型的。</p>
+<p>2.在文件/include/asm-alpha/posix_types.h中可以看到这样的定义</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span>		<span class="keyword">__kernel_pid_t</span>;</span><br></pre></td></tr></table></figure>
+<p>由此我们终于找到了pid_t的真实定义：实际他就是  int  类型的。</p>
+<h1 id="关于-execl"><a href="#关于-execl" class="headerlink" title="关于 execl():"></a>关于 execl():</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execl</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">const</span> <span class="keyword">char</span> *arg, ...</span></span></span><br><span class="line"><span class="function"><span class="params">                   <span class="comment">/* (char  *) NULL */</span>)</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">int</span> <span class="title">execlp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">const</span> <span class="keyword">char</span> *arg, ...</span></span></span><br><span class="line"><span class="function"><span class="params">                   <span class="comment">/* (char  *) NULL */</span>)</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">int</span> <span class="title">execle</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">const</span> <span class="keyword">char</span> *arg, ...</span></span></span><br><span class="line"><span class="function"><span class="params">                   <span class="comment">/*, (char *) NULL, char * const envp[] */</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<pre><code>**l指的是commanline里面的的东西打包成list pass进exec()**
+int execv(const char *path, char *const argv[]);
+int execvp(const char *file, char *const argv[]);
+int execvpe(const char *file, char *const argv[],
+**v指的是commanline里面的的东西打包成array of strings pass进exec(), 跟main()里面相同**
+**p指的是pass进去的应该是PATH varable ,（ls -l , ps -a , code . 之类的环境变量）**
+**e指的是可以pass进去enviorment，不过这太难了，先不讲，我尼玛连装系统都装不明白呢。**
+
+例子：
+pid_t pid = fork();
+if(pid==0){execlp(&quot;code&quot;,&quot;.&quot;,NULL);}
+else{execlp(&quot;ps&quot;,&quot;-a&quot;,NULL);}  
+printf(&quot;这行并不会被执行&quot;);
+return 0;</code></pre><p>   run之后会打开visual code然后命令行显示一堆英文字母，因为execl会直接return，所以最后printf不会被执行。</p>
+<p>参考  <a href="https://www.coder.work/article/172915" target="_blank" rel="noopener">https://www.coder.work/article/172915</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    白碧哲
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://yoursite.com/2020/05/02/c%E6%9C%89%E5%85%B3/" title="c有关">http://yoursite.com/2020/05/02/c%E6%9C%89%E5%85%B3/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/30/pca/" rel="next" title="PCA有关">
+                <i class="fa fa-chevron-left"></i> PCA有关
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/touxiang.jpg"
+                alt="白碧哲" />
+            
+              <p class="site-author-name" itemprop="name">白碧哲</p>
+              <p class="site-description motion-element" itemprop="description">两脚离地了，病毒就上不去了，聪明的智商又占领高地了。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/baibizhe" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bbzatyddounan@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://leetcode-cn.com/u/phpno1" target="_blank" title="Leetcode/力扣">
+                      
+                        <i class="fa fa-fw fa-laptop-code"></i>Leetcode/力扣</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#fork-底层实现"><span class="nav-number">1.</span> <span class="nav-text">fork()底层实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写时复制"><span class="nav-number">2.</span> <span class="nav-text">写时复制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#fork"><span class="nav-number">2.1.</span> <span class="nav-text">fork()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fork-源码"><span class="nav-number">2.2.</span> <span class="nav-text">fork() 源码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pid-t的类型定义"><span class="nav-number">3.</span> <span class="nav-text">pid_t的类型定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于-execl"><span class="nav-number">4.</span> <span class="nav-text">关于 execl():</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白碧哲</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

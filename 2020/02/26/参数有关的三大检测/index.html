@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="统计,证明," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="LRT似然比检验（likelihood ratio test, LRT）是一种检验参数能否反映真实约束的方法1 LRT for Normal distribution with known $\sigma$$L(\mu)&#x3D;\left(2 \pi \sigma_{0}^{2}\right)^{-n &#x2F; 2} \exp \left(-\frac{1}{2 \sigma_{0}^{2}} \sum\le">
+<meta property="og:type" content="article">
+<meta property="og:title" content="参数有关的三大检测">
+<meta property="og:url" content="http://yoursite.com/2020/02/26/%E5%8F%82%E6%95%B0%E6%9C%89%E5%85%B3%E7%9A%84%E4%B8%89%E5%A4%A7%E6%A3%80%E6%B5%8B/index.html">
+<meta property="og:site_name" content="白碧哲">
+<meta property="og:description" content="LRT似然比检验（likelihood ratio test, LRT）是一种检验参数能否反映真实约束的方法1 LRT for Normal distribution with known $\sigma$$L(\mu)&#x3D;\left(2 \pi \sigma_{0}^{2}\right)^{-n &#x2F; 2} \exp \left(-\frac{1}{2 \sigma_{0}^{2}} \sum\le">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-02-26T14:58:10.000Z">
+<meta property="article:modified_time" content="2020-05-03T02:49:10.000Z">
+<meta property="article:author" content="白碧哲">
+<meta property="article:tag" content="统计">
+<meta property="article:tag" content="证明">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/26/参数有关的三大检测/"/>
+
+
+
+
+
+  <title>参数有关的三大检测 | 白碧哲</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">白碧哲</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">统计+计算机</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/%E5%8F%82%E6%95%B0%E6%9C%89%E5%85%B3%E7%9A%84%E4%B8%89%E5%A4%A7%E6%A3%80%E6%B5%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="白碧哲">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/touxiang.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="白碧哲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">参数有关的三大检测</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-26T09:58:10-05:00">
+                2020-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="LRT"><a href="#LRT" class="headerlink" title="LRT"></a>LRT</h2><p><strong>似然比检验（likelihood ratio test, LRT）</strong>是一种检验<strong>参数能否反映真实约束</strong>的方法<br>1 LRT for Normal distribution with known $\sigma$<br>$L(\mu)=\left(2 \pi \sigma_{0}^{2}\right)^{-n / 2} \exp \left(-\frac{1}{2 \sigma_{0}^{2}} \sum\left(x_{i}-\mu\right)^{2}\right)$<br>Under $H_{0}, L\left(\mu_{0}\right)=\left(2 \pi \sigma_{0}^{2}\right)^{-n / 2} \exp \left(-\frac{1}{2 \sigma_{0}^{2}} \sum\left(X_{i}-\mu_{0}\right)^{2}\right)$<br>The denominator, we have to maximize $L(\mu) .$ We know $L(\mu)$ is maximized at $\bar{X}$<br>which gives $L(\hat{\mu})=\left(2 \pi \sigma_{0}^{2}\right)^{-n / 2} \exp \left(-\frac{1}{2 \sigma_{0}^{2}} \sum\left(X_{i}-\bar{X}\right)^{2}\right)$<br>$$\Lambda=\frac{L\left(\mu_{0}\right)}{L(\hat{\mu})}$$<br>p-d =1 $\rightarrow$$\sum_{i}\left(X_{i}-\mu\right)^{2}=\sum_{i}\left(X_{i}-\bar{X}\right)^{2}+n(\bar{X}-\mu)^{2}$<br>$\begin{aligned} \Lambda &amp;=\exp \left(-\frac{1}{2 \sigma_{0}^{2}}\left[\sum\left(X_{i}-\mu_{0}\right)^{2}-\sum\left(X_{i}-\bar{X}\right)^{2}\right]\right) \ \Longrightarrow-2 \ln \Lambda &amp;=\frac{1}{\sigma_{0}^{2}}\left[\sum\left(X_{i}-\mu_{0}\right)^{2}-\sum\left(X_{i}-\bar{X}\right)^{2}\right] \ &amp;=\frac{1}{\sigma_{0}^{2}} n\left(\bar{X}-\mu_{0}\right)^{2} \ &amp;=\left(\frac{\bar{X}-\mu_{0}}{\left.\sigma_{0} / \sqrt{(} n\right)}\right)^{2} \sim \chi_{(d f=1)}^{2} \end{aligned}$<br>2 example fpr LRT for exponential distribution<br>$X_{i} \sim \operatorname{Exp}(\theta), E(X)=\theta$<br>n =100 , $\bar{x} =75$<br>The hypothesis we wish to test is $H_{0}: \theta=60$ $H_{1}: \theta \neq 60$<br>$L(\theta | \mathbf{x})=\frac{1}{\theta^{n}} \exp \left(-\frac{1}{\theta} \sum_{i=1}^{n} x_{i}\right)$. MLE for $\theta$ is  $\bar{x}$ , we  plug in $\theta_0$ and $\bar{x}$  into likelihood ratio we get:<br>$\Lambda=\left(\frac{\bar{x}}{\theta_{0}}\right)^{n} \exp \left(n\left(1-\frac{\bar{x}}{\theta_{0}}\right)\right)$ [ remember $\sum x_i$ = n$\bar{x}$]<br>plug in  exact data we get:<br>$-2 \log \Lambda=-2(100)\left(\log 75-\log 60+1-\frac{75}{60}\right)=5.37$<br>$\chi_{1,0.95}^{2}=3.84$  we reject $H_0$<br>3 Constructing Confidence Interval using LRT:<br>We reject $H_{0}$ if $-2 \ln \Lambda&gt;\chi_{1-\alpha,(d f=p-d)}^{2}$<br>Conversely, we will fail to reject if $-2 \ln \Lambda&lt;\chi_{1-\alpha,(d f=p-d)}^{2}$<br>we will have , $95 %$ CI for $\theta$ is the solution of $-2(100)\left(\log 75-\log \theta+1-\frac{75}{\theta}\right)&lt;3.84$<br>which is (62.037,91.841)</p>
+<h2 id="WALD-test"><a href="#WALD-test" class="headerlink" title="WALD test"></a>WALD test</h2><p>1$$\frac{\hat{\theta}-\theta_{0}}{S E[\hat{\theta}]} \stackrel{D}{\rightarrow} N(0,1)$$<br>Wald(inventor) proposed the use of observed-fisher information to estimate $S E[\hat{\theta}]$<br>second-derivative of the negative log-likelihood replace θ by ˆθ<br>2 example :<br>Suppose $X_{1}, X_{2}, \ldots X_{n} \stackrel{i i d}{\sim} \operatorname{Bern}(\theta)$<br>$l(\theta)=\sum X_{i} \log \theta+\left(n-\sum X_{i}\right) \log (1-\theta)$<br>$l^{\prime}(\theta)=S(\theta)=\frac{\sum X_{i}}{\theta}-\frac{n-\sum X_{i}}{1-\theta} \Longrightarrow \hat{\theta}=\bar{X}$<br>$l^{\prime \prime}(\theta)=-\frac{\sum X_{i}}{\theta^{2}}-\frac{n-\sum X_{i}}{(1-\theta)^{2}}$<br>Obs. Fisher Info $=-\left.l^{\prime \prime}(\theta)\right|<em>{\theta=\bar{X}}=\frac{n}{\bar{X}}+\frac{n}{1-\bar{X}}=\frac{n}{\bar{X}(1-\bar{X})}$<br>Wald Test Stat, $\frac{\bar{X}-\theta</em>{0}}{\sqrt{\frac{\bar{X}(1-\bar{X})}{n}}} \stackrel{D}{\longrightarrow} N(0,1)$</p>
+<h2 id="Score-test"><a href="#Score-test" class="headerlink" title="Score test"></a>Score test</h2><p>1$$\frac{S\left(\theta_{0}\right)}{\sqrt{n I\left(\theta_{0}\right)}} \stackrel{D}{\rightarrow} N(0,1)$$<br>2 example:<br>Suppose $X_{1}, X_{2}, \ldots X_{n} \stackrel{i i d}{\sim} \operatorname{Bern}(\theta)$<br>$l(\theta)=\sum X_{i} \log \theta+\left(n-\sum X_{i}\right) \log (1-\theta)$<br>$l^{\prime}(\theta)=S(\theta)=\frac{\sum X_{i}}{\theta}-\frac{n-\sum X_{i}}{1-\theta}$<br>$S\left(\theta_{0}\right)=\frac{\sum X_{i}}{\theta_{0}}-\frac{n-\sum X_{i}}{1-\theta_{0}}=\frac{n\left(\bar{X}-\theta_{0}\right)}{\theta_{0}\left(1-\theta_{0}\right)}$<br>$l^{\prime \prime}(\theta)=-\frac{\sum X_{i}}{\theta^{2}}-\frac{n-\sum X_{i}}{(1-\theta)^{2}}$<br>Fisher Info $=-E[l^{\prime \prime}(\theta)]|<em>{\theta=\theta</em>{0}}=\frac{n}{\theta_{0}}+\frac{n}{1-\theta_{0}}=\frac{n}{\theta_{0}(1-\theta_{0})}$<br>Score Test Stat, $\frac{\bar{X}-\theta_{0}}{\sqrt{\frac{\theta_{0}(1-\theta_{0})}{n}}} \stackrel{D}{\longrightarrow} N(0,1)$</p>
+<blockquote>
+<p>Conclusion<br>从计算上说，wald test更容易<br>如果n足够大的话，三个test没有太大差别，如果n小的话LRT是最优先的。</p>
+</blockquote>
+<blockquote>
+<p>有名的分布</p>
+</blockquote>
+<p>泊松部分:Poison<br>test statistics =2 $n\left[\theta_{0}-\bar{x}+\bar{x} \log \left(\frac{\bar{x}}{\theta_{0}}\right)\right]$  $\rightarrow$  $\chi_{0.95, d f}^{2}$</p>
+<h2 id="GOF-test看数据的分布是不是符合某一分布"><a href="#GOF-test看数据的分布是不是符合某一分布" class="headerlink" title="GOF(test看数据的分布是不是符合某一分布)"></a>GOF(test看数据的分布是不是符合某一分布)</h2><p>1.Example with uniform simple:<br>Suppose we have 10000 random numbers generated from a Uniform[0,1] distribution. After dividing them into 10 equal length bins we have these following counts.<br>xi:1 2  3 4 5 6 7 8 9<br>sample size:993  1044  1061  1021  1017  973  975  965  996  955</p>
+<p>$\textbf{SOL:}$<br>(1)If the numbers are really from a Uniform[0,1] distribution then expected counts for each cell is $10000 * \frac{1}{10}=1000$<br>(2)test stat, $X^{2}=\left(\frac{(993-1000)^{2}}{1000}+\frac{(1044-1000)^{2}}{1000}+\ldots+\frac{(955-1000)^{2}}{1000}\right)=11.056$<br>(3)$\mathrm{p}$ -value $=1$ -pchisq $(11.056, \mathrm{df}=9)=0.27189$<br>We don’t have any evidence to reject the statement that these number are from a Uniform[0,1] distribution.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    白碧哲
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://yoursite.com/2020/02/26/%E5%8F%82%E6%95%B0%E6%9C%89%E5%85%B3%E7%9A%84%E4%B8%89%E5%A4%A7%E6%A3%80%E6%B5%8B/" title="参数有关的三大检测">http://yoursite.com/2020/02/26/%E5%8F%82%E6%95%B0%E6%9C%89%E5%85%B3%E7%9A%84%E4%B8%89%E5%A4%A7%E6%A3%80%E6%B5%8B/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E7%BB%9F%E8%AE%A1/" rel="tag"># 统计</a>
+          
+            <a href="/tags/%E8%AF%81%E6%98%8E/" rel="tag"># 证明</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/26/%E7%AC%AC%E4%B8%80%E4%BB%BD%E8%A1%A5%E5%85%85%E8%AF%81%E6%98%8E/" rel="next" title="第一份补充证明">
+                <i class="fa fa-chevron-left"></i> 第一份补充证明
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/26/%E4%BC%B0%E8%AE%A1%E5%99%A8%E7%9A%84%E6%80%A7%E8%B4%A8%E5%92%8C%E5%85%8B%E6%8B%89%E7%BE%8E-%E7%BD%97%E4%B8%8B%E7%95%8C/" rel="prev" title="估计器的性质和克拉美-罗下界(第一篇MD包含LATEX的文章)">
+                估计器的性质和克拉美-罗下界(第一篇MD包含LATEX的文章) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/touxiang.jpg"
+                alt="白碧哲" />
+            
+              <p class="site-author-name" itemprop="name">白碧哲</p>
+              <p class="site-description motion-element" itemprop="description">两脚离地了，病毒就上不去了，聪明的智商又占领高地了。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/baibizhe" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bbzatyddounan@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://leetcode-cn.com/u/phpno1" target="_blank" title="Leetcode/力扣">
+                      
+                        <i class="fa fa-fw fa-laptop-code"></i>Leetcode/力扣</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LRT"><span class="nav-number">1.</span> <span class="nav-text">LRT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WALD-test"><span class="nav-number">2.</span> <span class="nav-text">WALD test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Score-test"><span class="nav-number">3.</span> <span class="nav-text">Score test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GOF-test看数据的分布是不是符合某一分布"><span class="nav-number">4.</span> <span class="nav-text">GOF(test看数据的分布是不是符合某一分布)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">白碧哲</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
