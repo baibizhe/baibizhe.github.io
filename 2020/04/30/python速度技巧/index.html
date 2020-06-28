@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="机器学习,证明," />
+  <meta name="keywords" content="python," />
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="前注： \(\mathcal{E}{app} &#x3D; (approximation error)\) \( \mathcal{E}{\text {est }} &#x3D;(estimation error) \mathcal{E}{\mathrm{opt}} \quad&#x3D; (optimization error) T \quad &#x3D;(computation time)\)\( \ell(f(x), y) 就是">
+<meta name="description" content="需要多数据成员进行频繁的查找或者访问的时候12345678910111213from time import time  t &#x3D; time()  list &#x3D; [&#39;a&#39;,&#39;b&#39;,&#39;is&#39;,&#39;python&#39;,&#39;jason&#39;,&#39;hello&#39;,&#39;hill&#39;,&#39;wit">
 <meta property="og:type" content="article">
-<meta property="og:title" content="不同的近似优化算法的误差和时间复杂度">
-<meta property="og:url" content="http://yoursite.com/2020/02/26/%E4%B8%8D%E5%90%8C%E7%9A%84%E8%BF%91%E4%BC%BC%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%92%8C%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/index.html">
+<meta property="og:title" content="python速度技巧">
+<meta property="og:url" content="http://yoursite.com/2020/04/30/python%E9%80%9F%E5%BA%A6%E6%8A%80%E5%B7%A7/index.html">
 <meta property="og:site_name" content="白碧哲">
-<meta property="og:description" content="前注： \(\mathcal{E}{app} &#x3D; (approximation error)\) \( \mathcal{E}{\text {est }} &#x3D;(estimation error) \mathcal{E}{\mathrm{opt}} \quad&#x3D; (optimization error) T \quad &#x3D;(computation time)\)\( \ell(f(x), y) 就是">
+<meta property="og:description" content="需要多数据成员进行频繁的查找或者访问的时候12345678910111213from time import time  t &#x3D; time()  list &#x3D; [&#39;a&#39;,&#39;b&#39;,&#39;is&#39;,&#39;python&#39;,&#39;jason&#39;,&#39;hello&#39;,&#39;hill&#39;,&#39;wit">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-02-26T14:58:10.000Z">
-<meta property="article:modified_time" content="2020-03-06T05:05:18.000Z">
+<meta property="article:published_time" content="2020-04-30T14:58:10.000Z">
+<meta property="article:modified_time" content="2020-06-14T15:02:39.772Z">
 <meta property="article:author" content="白碧哲">
-<meta property="article:tag" content="机器学习">
-<meta property="article:tag" content="证明">
+<meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
 
 
@@ -121,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/26/不同的近似优化算法的误差和时间复杂度/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/04/30/python速度技巧/"/>
 
 
 
 
 
-  <title>不同的近似优化算法的误差和时间复杂度 | 白碧哲</title>
+  <title>python速度技巧 | 白碧哲</title>
   
 
 
@@ -268,7 +267,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/%E4%B8%8D%E5%90%8C%E7%9A%84%E8%BF%91%E4%BC%BC%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%92%8C%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/30/python%E9%80%9F%E5%BA%A6%E6%8A%80%E5%B7%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="白碧哲">
@@ -285,7 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">不同的近似优化算法的误差和时间复杂度</h1>
+          <h1 class="post-title" itemprop="name headline">python速度技巧</h1>
         
 
         <div class="post-meta">
@@ -297,8 +296,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-26T09:58:10-05:00">
-                2020-02-26
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-30T10:58:10-04:00">
+                2020-04-30
               </time>
             
 
@@ -353,11 +352,35 @@
       
 
       
-        <p>前注： \(\mathcal{E}<em>{app} = (approximation error)\) \( \mathcal{E}</em>{\text {est }} =(estimation error) \mathcal{E}<em>{\mathrm{opt}} \quad= (optimization error) T \quad =(computation time)\)<br>\( \ell(f(x), y) 就是loss function\) n:sample size ， d:feature  number，\( \rho\)为事先定义好的可以容忍的误差最大值<br>优化算法优化的对象是:<br>\(E(f)=\int l(f(x), y) d P(x, y)=E[l(f(x), y)]\) 也就是求解  \(f^{*}=\arg \min _{f} E[l(\hat{y}, y) | x]\)<br>我们的学习过程实际上是根据训练数据从一组函数F 内选择出函数 \(f</em>{n}=\operatorname{argmin}<em>{f} E</em>{n}[f]\) 定义 \(f^<em>f\) 为所有可能的最优的函数(可能不在F里面)，<br>再定义 \( f_{F}^{</em>}=\operatorname{argmin}<em>{f} E[f]\)就是F里面最优函数，则<br>\(E\left[E\left(f</em>{n}\right)-E\left(f^{<em>}\right]\right]=E\left[E\left(f_{F}^{</em>}\right)-E\left(f^{<em>}\right)\right]+E\left[E\left(f_{n}\right)-E\left(f_{F}^{</em>}\right)\right]=e_{a p p}+e_{e s t}\)<br>\(e_{a p p}\)表示 approximation error（F FF与最优解的差距）, \(e_{e s t}\) estimation error（由于训练数据和优化算法得到的函数与F FF内最优函数的差距）<br>找到最优的\(f_nf\) 需要很复杂的计算，而我们不需要找到最优的\(f_nf\),因为\(E_{n}(f)\)    本身就是近似的，所以我们可以在优化算法收敛前提前终止迭代。<br>假设我们得到的近似解\( \hat{f}<em>{n}\)满足   \(E</em>{n}\left(\hat{f}<em>{n}\right)&lt;E</em>{n}\left(f_{n}\right)+\rho\) 那么：<br>\(E\left[E\left(\hat{f}<em>{n}\right)-E\left(f^{*}\right]\right]=E\left[E\left(f</em>{F}^{<em>}\right)-E\left(f^{</em>}\right)\right]+E\left[E\left(f_{n}\right)-E\left(f_{F}^{*}\right)\right]+E\left[E\left(\hat{f}<em>{n}\right)-E\left(f</em>{n}\right)\right]=e_{\alpha p p}+e_{e s t}+e_{o p t}\) 多出一个optimization error。</p>
-<ul>
-<li>general condition bound :<br>\( \mathcal{E}<em>{\mathrm{app}}+\mathcal{E}</em>{\mathrm{est}} \leq c\left(\mathcal{E}<em>{\mathrm{app}}+\left(\frac{d}{n} \log \frac{n}{d}\right)^{\alpha}\right) \quad \text { for } \frac{1}{2} \leq \alpha \leq 1\)<br>\( \alpha\)就是learning rate ，例如梯度下降里面那个\( \alpha\) 所以总的error为：<br>\( \mathcal{E}=\mathcal{E}</em>{\mathrm{app}}+\mathcal{E}<em>{\mathrm{est}}+\mathcal{E}</em>{\mathrm{opt}}=\mathbb{E}\left[E\left(\tilde{f}<em>{n}\right)-E\left(f^{*}\right)\right] \leq c\left(\mathcal{E}</em>{\mathrm{app}}+\left(\frac{d}{n} \log \frac{n}{d}\right)^{\alpha}+\rho\right)\)</li>
-<li>各种梯度下降的复杂度：<br>\( \begin{array}{lcccc}<br>\hline \text { Algorithm } &amp; \begin{array}{c}<br>\text { Cost of one } \<br>\text { iteration }<br>\end{array} &amp; \begin{array}{c}<br>\text { Iterations } \<br>\text { to reach } \rho<br>\end{array} &amp; \begin{array}{c}<br>\text { Time to reach } \<br>\text { accuracy } \rho<br>\end{array} &amp; \begin{array}{c}<br>\text { Time to reach } \<br>\mathcal{E} \leq c\left(\mathcal{E}_{\text {app }}+\varepsilon\right)<br>\end{array} \<br>\hline \text { GD } &amp; \mathcal{O}(n d) &amp; \mathcal{O}\left(\kappa \log \frac{1}{\rho}\right) &amp; \mathcal{O}\left(n d \kappa \log \frac{1}{\rho}\right) &amp; \mathcal{O}\left(\frac{d^{2} \kappa}{\varepsilon^{1 / \alpha}} \log ^{2} \frac{1}{\varepsilon}\right) \<br>2 \text { GD } &amp; \mathcal{O}\left(d^{2}+n d\right) &amp; \mathcal{O}\left(\log \log \frac{1}{\rho}\right) &amp; \mathcal{O}\left(\left(d^{2}+n d\right) \log \log \frac{1}{\rho}\right) &amp; \mathcal{O}\left(\frac{d^{2}}{\varepsilon^{1 / \alpha}} \log \frac{1}{\varepsilon} \log \log \frac{1}{\varepsilon}\right) \<br>\text { SGD } &amp; \mathcal{O}(d) &amp; \frac{\nu \kappa^{2}}{\rho}+o\left(\frac{1}{\rho}\right) &amp; \mathcal{O}\left(\frac{d \nu \kappa^{2}}{\rho}\right) &amp; \mathcal{O}\left(\frac{d \nu \kappa^{2}}{\varepsilon}\right) \<br>2 \text { SGD } &amp; \mathcal{O}\left(d^{2}\right) &amp; \frac{\nu}{\rho}+o\left(\frac{1}{\rho}\right) &amp; \mathcal{O}\left(\frac{d^{2} \nu}{\rho}\right) &amp; \mathcal{O}\left(\frac{d^{2} \nu}{\varepsilon}\right) \<br>\hline<br>\end{array}\)<br>结论：The SGD and 2SGD results do not depend on the estimation rate \( \alpha\).<br>Second order algorithms bring little asymptotical improvements in e.<br>Stochastic algorithms (SGD, 2SGD) yield the best generalization performance despite being the worst optimization algorithms.</li>
-</ul>
+        <h3 id="需要多数据成员进行频繁的查找或者访问的时候"><a href="#需要多数据成员进行频繁的查找或者访问的时候" class="headerlink" title="需要多数据成员进行频繁的查找或者访问的时候"></a>需要多数据成员进行频繁的查找或者访问的时候</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from time import time </span><br><span class="line"> t &#x3D; time() </span><br><span class="line"> list &#x3D; [&#39;a&#39;,&#39;b&#39;,&#39;is&#39;,&#39;python&#39;,&#39;jason&#39;,&#39;hello&#39;,&#39;hill&#39;,&#39;with&#39;,&#39;phone&#39;,&#39;test&#39;, </span><br><span class="line">&#39;dfdf&#39;,&#39;apple&#39;,&#39;pddf&#39;,&#39;ind&#39;,&#39;basic&#39;,&#39;none&#39;,&#39;baecr&#39;,&#39;var&#39;,&#39;bana&#39;,&#39;dd&#39;,&#39;wrd&#39;] </span><br><span class="line"> #list &#x3D; dict.fromkeys(list,True) </span><br><span class="line"> print list </span><br><span class="line"> filter &#x3D; [] </span><br><span class="line"> for i in range (1000000): </span><br><span class="line">     for find in [&#39;is&#39;,&#39;hat&#39;,&#39;new&#39;,&#39;list&#39;,&#39;old&#39;,&#39;.&#39;]: </span><br><span class="line">         if find not in list: </span><br><span class="line">             filter.append(find) </span><br><span class="line"> print &quot;total run time:&quot;</span><br><span class="line"> print time()-t</span><br></pre></td></tr></table></figure>
+<p>上述代码运行大概需要 16.09seconds。如果去掉行 #list = dict.fromkeys(list,True) 的注释，将 list 转换为字典之后再运行，时间大约为 8.375 seconds，效率大概提高了一半。因此在需要多数据成员进行频繁的查找或者访问的时候，使用 dict 而不是 list 是一个较好的选择。</p>
+<h3 id="list-交集，并集"><a href="#list-交集，并集" class="headerlink" title="list 交集，并集"></a>list 交集，并集</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from time import time </span><br><span class="line">t &#x3D; time() </span><br><span class="line">lista&#x3D;[1,2,3,4,5,6,7,8,9,13,34,53,42,44] </span><br><span class="line">listb&#x3D;[2,4,6,9,23] </span><br><span class="line">intersection&#x3D;[] </span><br><span class="line">for i in range (1000000): </span><br><span class="line">    for a in lista: </span><br><span class="line">        for b in listb: </span><br><span class="line">            if a &#x3D;&#x3D; b: </span><br><span class="line">                intersection.append(a) </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">print &quot;total run time:&quot;</span><br><span class="line">print time()-t</span><br><span class="line">#total run time: </span><br><span class="line">#38.4070000648</span><br></pre></td></tr></table></figure>
+<p>而是用set求交集</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from time import time </span><br><span class="line">t &#x3D; time() </span><br><span class="line">lista&#x3D;[1,2,3,4,5,6,7,8,9,13,34,53,42,44] </span><br><span class="line">listb&#x3D;[2,4,6,9,23] </span><br><span class="line">intersection&#x3D;[] </span><br><span class="line">for i in range (1000000): </span><br><span class="line">    list(set(lista)&amp;set(listb)) </span><br><span class="line">print &quot;total run time:&quot;</span><br><span class="line">print time()-t</span><br><span class="line">#total run time: </span><br><span class="line"># 8.75</span><br></pre></td></tr></table></figure>
+
+<h3 id="对列表-循环的优化"><a href="#对列表-循环的优化" class="headerlink" title="对列表/循环的优化"></a>对列表/循环的优化</h3><p>地下这段代码大概运行时间是132.375</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from time import time </span><br><span class="line">t &#x3D; time() </span><br><span class="line">lista &#x3D; [1,2,3,4,5,6,7,8,9,10] </span><br><span class="line">listb &#x3D;[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,0.01] </span><br><span class="line">for i in range (1000000): </span><br><span class="line">    for a in range(len(lista)): </span><br><span class="line">        for b in range(len(listb)): </span><br><span class="line">            x&#x3D;lista[a]+listb[b] </span><br><span class="line">print &quot;total run time:&quot;</span><br><span class="line">print time()-t</span><br></pre></td></tr></table></figure>
+<p>现在进行如下优化，将长度计算提到循环外，range 用 xrange 代替，同时将第三层的计算 lista[a] 提到循环的第二层。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from time import time </span><br><span class="line">t &#x3D; time() </span><br><span class="line">lista &#x3D; [1,2,3,4,5,6,7,8,9,10] </span><br><span class="line">listb &#x3D;[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,0.01] </span><br><span class="line">len1&#x3D;len(lista) </span><br><span class="line">len2&#x3D;len(listb) </span><br><span class="line">for i in xrange (1000000): </span><br><span class="line">    for a in xrange(len1): </span><br><span class="line">        temp&#x3D;lista[a] </span><br><span class="line">        for b in xrange(len2): </span><br><span class="line">            x&#x3D;temp+listb[b] </span><br><span class="line">print &quot;total run time:&quot;</span><br><span class="line">print time()-t</span><br></pre></td></tr></table></figure>
+<p>上述优化后的程序其运行时间缩短为 102.171999931<br>xrange的用法与range相同，即xrange(start, stop, step)根据start与stop指定的范围以及step设定的步长,他所不同的是xrange并不是生成序列，而是作为一个生成器。即他的数据生成一个取出一个。<br>当列表特别大时，使用xrange省内存。</p>
+<h4 id="使用列表解析（list-comprehension）和生成器表达式（generator-expression）"><a href="#使用列表解析（list-comprehension）和生成器表达式（generator-expression）" class="headerlink" title="使用列表解析（list comprehension）和生成器表达式（generator expression）"></a>使用列表解析（list comprehension）和生成器表达式（generator expression）</h4><p>列表解析要比在循环中重新构建一个新的 list 更为高效，因此我们可以利用这一特性来提高运行的效率。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from time import time </span><br><span class="line"> t &#x3D; time() </span><br><span class="line"> list &#x3D; [&#39;a&#39;,&#39;b&#39;,&#39;is&#39;,&#39;python&#39;,&#39;jason&#39;,&#39;hello&#39;,&#39;hill&#39;,&#39;with&#39;,&#39;phone&#39;,&#39;test&#39;, </span><br><span class="line">&#39;dfdf&#39;,&#39;apple&#39;,&#39;pddf&#39;,&#39;ind&#39;,&#39;basic&#39;,&#39;none&#39;,&#39;baecr&#39;,&#39;var&#39;,&#39;bana&#39;,&#39;dd&#39;,&#39;wrd&#39;] </span><br><span class="line"> total&#x3D;[] </span><br><span class="line"> for i in range (1000000): </span><br><span class="line">     for w in list: </span><br><span class="line">         total.append(w) </span><br><span class="line"> print &quot;total run time:&quot;</span><br><span class="line"> print time()-t</span><br></pre></td></tr></table></figure>
+<p>列表解析</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for i in range (1000000): </span><br><span class="line">    a &#x3D; [w for w in list]</span><br></pre></td></tr></table></figure>
+<p>上述代码直接运行大概需要 17s，而改为使用列表解析后 ，运行时间缩短为 9.29s。将近提高了一半。生成器表达式则是在 2.4 中引入的新内容，语法和列表解析类似，但是在大数据量处理时，生成器表达式的优势较为明显，它并不创建一个列表，只是返回一个生成器，因此效率较高。在上述例子上中代码 a = [w for w in list] 修改为 a = (w for w in list)，运行时间进一步减少，缩短约为 2.98s。</p>
+<h3 id="字符串的优化"><a href="#字符串的优化" class="headerlink" title="字符串的优化"></a>字符串的优化</h3><p>python 中的字符串对象是不可改变的，因此对任何字符串的操作如拼接，修改等都将产生一个新的字符串对象，而不是基于原字符串，因此这种持续的 copy 会在一定程度上影响 python 的性能。<br>在字符串连接的使用尽量使用 join() 而不是 +：在底下这段代码中中使用 + 进行字符串连接大概需要 0.125 s，而使用 join 缩短为 0.016s。因此在字符的操作上 join 比 + 要快，因此要尽量使用 join 而不是 +。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from time import time </span><br><span class="line"> </span><br><span class="line">t &#x3D; time() </span><br><span class="line">s &#x3D; &quot;&quot;</span><br><span class="line">list &#x3D; [&#39;a&#39;,&#39;b&#39;,&#39;b&#39;,&#39;d&#39;,&#39;e&#39;,&#39;f&#39;,&#39;g&#39;,&#39;h&#39;,&#39;i&#39;,&#39;j&#39;,&#39;k&#39;,&#39;l&#39;,&#39;m&#39;,&#39;n&#39;] </span><br><span class="line">for i in range (10000): </span><br><span class="line">    for substr in list: </span><br><span class="line">        s+&#x3D; substr     </span><br><span class="line">print &quot;total run time:&quot;</span><br><span class="line">print time()-t</span><br></pre></td></tr></table></figure>
+<p>对字符进行格式化比直接串联读取要快，因此要使用<br>out = “<html>%s%s%s%s</html>“ % (head, prologue, query, tail)<br>而不是 out = “<html>“ + head + prologue + query + tail + “</html>“</p>
+<h3 id="Cpython"><a href="#Cpython" class="headerlink" title="Cpython"></a>Cpython</h3><p>Cython 是用 python 实现的一种语言，可以用来写 python 扩展，用它写出来的库都可以通过 import 来载入，性能上比 python 的快。<br>Cython 代码与 python 不同，必须先编译，编译一般需要经过两个阶段，将 pyx 文件编译为 .c 文件，再将 .c 文件编译为 .so 文件。编译有多种方法，自行查阅<br>简单的性能比较·<br>底下是cpython </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from time import time </span><br><span class="line">def test(int n): </span><br><span class="line">       cdef int a &#x3D;0 </span><br><span class="line">       cdef int i </span><br><span class="line">       for i in xrange(n): </span><br><span class="line">               a+&#x3D; i </span><br><span class="line">       return a </span><br><span class="line"> </span><br><span class="line">t &#x3D; time() </span><br><span class="line">test(10000000) </span><br><span class="line">print &quot;total run time:&quot;</span><br><span class="line">print time()-t</span><br><span class="line">#total run time: </span><br><span class="line">#0.00714015960693</span><br></pre></td></tr></table></figure>
+<p>Python 测试代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from time import time </span><br><span class="line">def test(n): </span><br><span class="line">       a &#x3D;0; </span><br><span class="line">       for i in xrange(n): </span><br><span class="line">               a+&#x3D; i </span><br><span class="line">       return a </span><br><span class="line">t &#x3D; time() </span><br><span class="line">test(10000000) </span><br><span class="line">print &quot;total run time:&quot;</span><br><span class="line">print time()-t </span><br><span class="line">#total run time: </span><br><span class="line">#0.971596002579</span><br></pre></td></tr></table></figure>
+<p>从上述对比可以看到使用 Cython 的速度提高了将近 100 多倍。</p>
+<h3 id="定位程序性能瓶颈"><a href="#定位程序性能瓶颈" class="headerlink" title="定位程序性能瓶颈"></a>定位程序性能瓶颈</h3><p>对代码优化的前提是需要了解性能瓶颈在什么地方，程序运行的主要时间是消耗在哪里，对于比较复杂的代码可以借助一些工具来定位，python 内置了丰富的性能分析工具，如 profile,cProfile 与 hotshot 等。其中 Profiler 是 python 自带的一组程序，能够描述程序运行时候的性能，并提供各种统计帮助用户定位程序的性能瓶颈。Python 标准模块提供三种 profilers:cProfile,profile 以及 hotshot。</p>
+<p>profile 的使用非常简单，只需要在使用之前进行 import 即可。具体实例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import profile </span><br><span class="line">def profileTest(): </span><br><span class="line">   Total &#x3D;1; </span><br><span class="line">   for i in range(10): </span><br><span class="line">       Total&#x3D;Total*(i+1) </span><br><span class="line">       print Total </span><br><span class="line">   return Total </span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;: </span><br><span class="line">   profile.run(&quot;profileTest()&quot;)</span><br></pre></td></tr></table></figure>
+<p>输出结果解析:<br>ncalls：表示函数调用的次数；<br>tottime：表示指定函数的总的运行时间，除掉函数中调用子函数的运行时间；<br>percall：（第一个 percall）等于 tottime/ncalls；<br>cumtime：表示该函数及其所有子函数的调用运行的时间，即函数开始调用到返回的时间；<br>percall：（第二个 percall）即函数运行一次的平均时间，等于 cumtime/ncalls；<br>filename:lineno(function)：每个函数调用的具体信息；</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>1 if done is not None 比语句 if done != None 更快，读者可以自行验证；<br>2 使用级联比较 “x &lt; y &lt; z” 而不是 “x &lt; y and y &lt; z”；<br>3 while 1 要比 while True 更快（当然后者的可读性更好）；<br>4 build in 函数通常较快，add(a,b) 要优于 a+b。</p>
 
       
     </div>
@@ -378,7 +401,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://yoursite.com/2020/02/26/%E4%B8%8D%E5%90%8C%E7%9A%84%E8%BF%91%E4%BC%BC%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%92%8C%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" title="不同的近似优化算法的误差和时间复杂度">http://yoursite.com/2020/02/26/%E4%B8%8D%E5%90%8C%E7%9A%84%E8%BF%91%E4%BC%BC%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%92%8C%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/</a>
+    <a href="http://yoursite.com/2020/04/30/python%E9%80%9F%E5%BA%A6%E6%8A%80%E5%B7%A7/" title="python速度技巧">http://yoursite.com/2020/04/30/python%E9%80%9F%E5%BA%A6%E6%8A%80%E5%B7%A7/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -393,9 +416,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
-          
-            <a href="/tags/%E8%AF%81%E6%98%8E/" rel="tag"># 证明</a>
+            <a href="/tags/python/" rel="tag"># python</a>
           
         </div>
       
@@ -408,8 +429,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/26/%E4%BC%B0%E8%AE%A1%E5%99%A8%E7%9A%84%E6%80%A7%E8%B4%A8%E5%92%8C%E5%85%8B%E6%8B%89%E7%BE%8E-%E7%BD%97%E4%B8%8B%E7%95%8C/" rel="next" title="估计器的性质和克拉美-罗下界(第一篇MD包含LATEX的文章)">
-                <i class="fa fa-chevron-left"></i> 估计器的性质和克拉美-罗下界(第一篇MD包含LATEX的文章)
+              <a href="/2020/04/30/%E7%94%B5%E5%8A%9B%E5%B8%82%E5%9C%BA%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6/" rel="next" title="电力市场项目框架">
+                <i class="fa fa-chevron-left"></i> 电力市场项目框架
               </a>
             
           </div>
@@ -418,8 +439,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/02/26/decision-tree/" rel="prev" title="decision-tree">
-                decision-tree <i class="fa fa-chevron-right"></i>
+              <a href="/2020/04/30/pca/" rel="prev" title="PCA有关">
+                PCA有关 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -472,8 +493,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -550,6 +580,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#需要多数据成员进行频繁的查找或者访问的时候"><span class="nav-number">1.</span> <span class="nav-text">需要多数据成员进行频繁的查找或者访问的时候</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#list-交集，并集"><span class="nav-number">2.</span> <span class="nav-text">list 交集，并集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对列表-循环的优化"><span class="nav-number">3.</span> <span class="nav-text">对列表&#x2F;循环的优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用列表解析（list-comprehension）和生成器表达式（generator-expression）"><span class="nav-number">3.1.</span> <span class="nav-text">使用列表解析（list comprehension）和生成器表达式（generator expression）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串的优化"><span class="nav-number">4.</span> <span class="nav-text">字符串的优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cpython"><span class="nav-number">5.</span> <span class="nav-text">Cpython</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定位程序性能瓶颈"><span class="nav-number">6.</span> <span class="nav-text">定位程序性能瓶颈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">7.</span> <span class="nav-text">其他</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
