@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="机器学习,证明," />
+  <meta name="keywords" content="统计,证明," />
 
 
 
@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="前注： \(\mathcal{E}{app} &#x3D; (approximation error)\) \( \mathcal{E}{\text {est }} &#x3D;(estimation error) \mathcal{E}{\mathrm{opt}} \quad&#x3D; (optimization error) T \quad &#x3D;(computation time)\)\( \ell(f(x), y) 就是">
+<meta name="description" content="Least-Squares Problems by QR Factorization令 A 为训练集 $A&#x3D;\left[a_{1}, a_{2}, \ldots, a_{n}\right] \in R^{m \times n}$ $a_{1}, a_{2}, \ldots, a_{n} \in R^{m}$          y 为target。  我们的目标是 找到一个c $argmin_{c">
 <meta property="og:type" content="article">
-<meta property="og:title" content="不同的近似优化算法的误差和时间复杂度">
-<meta property="og:url" content="http://yoursite.com/2020/02/26/%E4%B8%8D%E5%90%8C%E7%9A%84%E8%BF%91%E4%BC%BC%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%92%8C%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/index.html">
+<meta property="og:title" content="qr_factorization 和 householder transformation解决最小二乘法">
+<meta property="og:url" content="http://yoursite.com/2020/02/26/qr_factorization%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95/index.html">
 <meta property="og:site_name" content="白碧哲">
-<meta property="og:description" content="前注： \(\mathcal{E}{app} &#x3D; (approximation error)\) \( \mathcal{E}{\text {est }} &#x3D;(estimation error) \mathcal{E}{\mathrm{opt}} \quad&#x3D; (optimization error) T \quad &#x3D;(computation time)\)\( \ell(f(x), y) 就是">
+<meta property="og:description" content="Least-Squares Problems by QR Factorization令 A 为训练集 $A&#x3D;\left[a_{1}, a_{2}, \ldots, a_{n}\right] \in R^{m \times n}$ $a_{1}, a_{2}, \ldots, a_{n} \in R^{m}$          y 为target。  我们的目标是 找到一个c $argmin_{c">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-02-26T14:58:10.000Z">
-<meta property="article:modified_time" content="2020-03-06T05:05:18.000Z">
+<meta property="article:modified_time" content="2020-08-02T11:05:34.602Z">
 <meta property="article:author" content="白碧哲">
-<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="统计">
 <meta property="article:tag" content="证明">
 <meta name="twitter:card" content="summary">
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/26/不同的近似优化算法的误差和时间复杂度/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/26/qr_factorization最小二乘法/"/>
 
 
 
 
 
-  <title>不同的近似优化算法的误差和时间复杂度 | 白碧哲</title>
+  <title>qr_factorization 和 householder transformation解决最小二乘法 | 白碧哲</title>
   
 
 
@@ -268,7 +268,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/%E4%B8%8D%E5%90%8C%E7%9A%84%E8%BF%91%E4%BC%BC%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%92%8C%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/qr_factorization%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="白碧哲">
@@ -285,7 +285,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">不同的近似优化算法的误差和时间复杂度</h1>
+          <h1 class="post-title" itemprop="name headline">qr_factorization 和 householder transformation解决最小二乘法</h1>
         
 
         <div class="post-meta">
@@ -353,11 +353,25 @@
       
 
       
-        <p>前注： \(\mathcal{E}<em>{app} = (approximation error)\) \( \mathcal{E}</em>{\text {est }} =(estimation error) \mathcal{E}<em>{\mathrm{opt}} \quad= (optimization error) T \quad =(computation time)\)<br>\( \ell(f(x), y) 就是loss function\) n:sample size ， d:feature  number，\( \rho\)为事先定义好的可以容忍的误差最大值<br>优化算法优化的对象是:<br>\(E(f)=\int l(f(x), y) d P(x, y)=E[l(f(x), y)]\) 也就是求解  \(f^{*}=\arg \min _{f} E[l(\hat{y}, y) | x]\)<br>我们的学习过程实际上是根据训练数据从一组函数F 内选择出函数 \(f</em>{n}=\operatorname{argmin}<em>{f} E</em>{n}[f]\) 定义 \(f^<em>f\) 为所有可能的最优的函数(可能不在F里面)，<br>再定义 \( f_{F}^{</em>}=\operatorname{argmin}<em>{f} E[f]\)就是F里面最优函数，则<br>\(E\left[E\left(f</em>{n}\right)-E\left(f^{<em>}\right]\right]=E\left[E\left(f_{F}^{</em>}\right)-E\left(f^{<em>}\right)\right]+E\left[E\left(f_{n}\right)-E\left(f_{F}^{</em>}\right)\right]=e_{a p p}+e_{e s t}\)<br>\(e_{a p p}\)表示 approximation error（F FF与最优解的差距）, \(e_{e s t}\) estimation error（由于训练数据和优化算法得到的函数与F FF内最优函数的差距）<br>找到最优的\(f_nf\) 需要很复杂的计算，而我们不需要找到最优的\(f_nf\),因为\(E_{n}(f)\)    本身就是近似的，所以我们可以在优化算法收敛前提前终止迭代。<br>假设我们得到的近似解\( \hat{f}<em>{n}\)满足   \(E</em>{n}\left(\hat{f}<em>{n}\right)&lt;E</em>{n}\left(f_{n}\right)+\rho\) 那么：<br>\(E\left[E\left(\hat{f}<em>{n}\right)-E\left(f^{*}\right]\right]=E\left[E\left(f</em>{F}^{<em>}\right)-E\left(f^{</em>}\right)\right]+E\left[E\left(f_{n}\right)-E\left(f_{F}^{*}\right)\right]+E\left[E\left(\hat{f}<em>{n}\right)-E\left(f</em>{n}\right)\right]=e_{\alpha p p}+e_{e s t}+e_{o p t}\) 多出一个optimization error。</p>
-<ul>
-<li>general condition bound :<br>\( \mathcal{E}<em>{\mathrm{app}}+\mathcal{E}</em>{\mathrm{est}} \leq c\left(\mathcal{E}<em>{\mathrm{app}}+\left(\frac{d}{n} \log \frac{n}{d}\right)^{\alpha}\right) \quad \text { for } \frac{1}{2} \leq \alpha \leq 1\)<br>\( \alpha\)就是learning rate ，例如梯度下降里面那个\( \alpha\) 所以总的error为：<br>\( \mathcal{E}=\mathcal{E}</em>{\mathrm{app}}+\mathcal{E}<em>{\mathrm{est}}+\mathcal{E}</em>{\mathrm{opt}}=\mathbb{E}\left[E\left(\tilde{f}<em>{n}\right)-E\left(f^{*}\right)\right] \leq c\left(\mathcal{E}</em>{\mathrm{app}}+\left(\frac{d}{n} \log \frac{n}{d}\right)^{\alpha}+\rho\right)\)</li>
-<li>各种梯度下降的复杂度：<br>\( \begin{array}{lcccc}<br>\hline \text { Algorithm } &amp; \begin{array}{c}<br>\text { Cost of one } \<br>\text { iteration }<br>\end{array} &amp; \begin{array}{c}<br>\text { Iterations } \<br>\text { to reach } \rho<br>\end{array} &amp; \begin{array}{c}<br>\text { Time to reach } \<br>\text { accuracy } \rho<br>\end{array} &amp; \begin{array}{c}<br>\text { Time to reach } \<br>\mathcal{E} \leq c\left(\mathcal{E}_{\text {app }}+\varepsilon\right)<br>\end{array} \<br>\hline \text { GD } &amp; \mathcal{O}(n d) &amp; \mathcal{O}\left(\kappa \log \frac{1}{\rho}\right) &amp; \mathcal{O}\left(n d \kappa \log \frac{1}{\rho}\right) &amp; \mathcal{O}\left(\frac{d^{2} \kappa}{\varepsilon^{1 / \alpha}} \log ^{2} \frac{1}{\varepsilon}\right) \<br>2 \text { GD } &amp; \mathcal{O}\left(d^{2}+n d\right) &amp; \mathcal{O}\left(\log \log \frac{1}{\rho}\right) &amp; \mathcal{O}\left(\left(d^{2}+n d\right) \log \log \frac{1}{\rho}\right) &amp; \mathcal{O}\left(\frac{d^{2}}{\varepsilon^{1 / \alpha}} \log \frac{1}{\varepsilon} \log \log \frac{1}{\varepsilon}\right) \<br>\text { SGD } &amp; \mathcal{O}(d) &amp; \frac{\nu \kappa^{2}}{\rho}+o\left(\frac{1}{\rho}\right) &amp; \mathcal{O}\left(\frac{d \nu \kappa^{2}}{\rho}\right) &amp; \mathcal{O}\left(\frac{d \nu \kappa^{2}}{\varepsilon}\right) \<br>2 \text { SGD } &amp; \mathcal{O}\left(d^{2}\right) &amp; \frac{\nu}{\rho}+o\left(\frac{1}{\rho}\right) &amp; \mathcal{O}\left(\frac{d^{2} \nu}{\rho}\right) &amp; \mathcal{O}\left(\frac{d^{2} \nu}{\varepsilon}\right) \<br>\hline<br>\end{array}\)<br>结论：The SGD and 2SGD results do not depend on the estimation rate \( \alpha\).<br>Second order algorithms bring little asymptotical improvements in e.<br>Stochastic algorithms (SGD, 2SGD) yield the best generalization performance despite being the worst optimization algorithms.</li>
-</ul>
+        <h2 id="Least-Squares-Problems-by-QR-Factorization"><a href="#Least-Squares-Problems-by-QR-Factorization" class="headerlink" title="Least-Squares Problems by QR Factorization"></a>Least-Squares Problems by QR Factorization</h2><p>令 A 为训练集 $A=\left[a_{1}, a_{2}, \ldots, a_{n}\right] \in R^{m \times n}$</p>
+<p>$a_{1}, a_{2}, \ldots, a_{n} \in R^{m}$          y 为target。 </p>
+<p>我们的目标是 找到一个c<br> $argmin_{c \in R^{n}}|A c-y|, \quad c=\left[c_{1}, c_{2}, \ldots, c_{n}\right]^{T}$  </p>
+<h3 id="QR-Factorization"><a href="#QR-Factorization" class="headerlink" title="QR Factorization"></a>QR Factorization</h3><p>$\hat{R}=$\left[\begin{array}{l}R \ O\end{array}\right]$\in \mathbb{R}^{m \times n}, \quad m&gt;n$<br>R 是一个对角线以下都为0的矩阵  ，例如</p>
+<p>$$\left[\begin{array}{rrr}1 &amp; -5.00 &amp; -15.00 \\ 0 &amp; 2.24 &amp; 11.18 \\ 0 &amp; 0 &amp; -1.93 \\ 0 &amp; 0 &amp; 0\end{array}\right]$$</p>
+<p>Q 是一个正交矩阵 （正交矩阵有很多性质，其中之一就是$QQ^T$ = I , 我们也在这里需要这个性质）<br>$$A = Q\hat{R}$$<br>我们的argmin目标变成了$\min _{\mathbf{c} \in \mathbb{R}^{n}}||Q \hat{R} \mathbf{c}-\mathbf{y}||$<br>$||Q \hat{R} \mathbf{c}-\mathbf{y}||=\left||Q^{T}(Q \hat{R} \mathbf{c}-\mathbf{y})\right||=\left||\hat{R} \mathbf{c}-Q^{T} \mathbf{y}\right||$ 因为一个向量乘上一个正交的矩阵之后norm并不会变。证明：<br>Q是正交矩阵 ，$||Q \mathbf{u}|^{2}=(Q \mathbf{u})^{T}(Q \mathbf{u})=\mathbf{u}^{T} Q^{T}(Q \mathbf{u})=\mathbf{u}^{T}\left(Q^{T} Q\right) \mathbf{u}=\mathbf{u}^{T} \mathbf{u}=||\mathbf{u}||^{2}$<br>最后，目标变成了<br>$argmin _{\mathbf{c} \in \mathbb{R}^{n}}||A \mathbf{c}-\mathbf{y}||=argmin _{\mathbf{c} \in \mathbb{R}^{n}}||Q \hat{R} \mathbf{c}-\mathbf{y}||=argmin _{\mathbf{c} \in \mathbb{R}^{n}}\left||\hat{R} \mathbf{c}-Q^{T} \mathbf{y}\right||$</p>
+<h3 id="QR-Factorization-by-Householder-Matrices"><a href="#QR-Factorization-by-Householder-Matrices" class="headerlink" title="QR Factorization by Householder Matrices"></a>QR Factorization by Householder Matrices</h3><p>QR分解有很多实现方法。<br>例如 Givens 旋转、Householder 变换，以及 Gram-Schmidt 正交化等等<br>这里不提及Givens旋转和  Gram-Schmidt 正交化实现方式，只讨论优缺点。<br>（1）Givens旋转 会比 Householder变换多出来大概50%的额外工作量和内存需求。<br>（2） Givens旋转在应对sparse matirx的时候会更好。<br>（3） 传统Gram-Schmidt  正交化的精确度不足。会有改进后的Gram-Schmidt 方法提供了更好的精度。<br>Big(O) for givens 旋转大概是 $2mn^2+2mn+c$ <a href="http://www.cs.nthu.edu.tw/~cherung/teaching/2011anm/note07.pdf" target="_blank" rel="noopener">http://www.cs.nthu.edu.tw/~cherung/teaching/2011anm/note07.pdf</a><br>Big(O) for householder大概是 $2mn^2-2n^3+c$<br>Big(O) for gram-schimidt 大概是$2mn^2$, 比 householder快一点， 但是精度不足<a href="https://www.researchgate.net/publication/220767145_Comparison_of_Different_Parallel_Modified_Gram-Schmidt_Algorithms" target="_blank" rel="noopener">https://www.researchgate.net/publication/220767145_Comparison_of_Different_Parallel_Modified_Gram-Schmidt_Algorithms</a> 第一页<br>（似乎这些算法都有parallel版本，但以后再看吧）<br>QR分解的例子：<br>A= $\left[\begin{array}{rrr}1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ -1 &amp; 1 &amp; 0 \\ -1 &amp; 0 &amp; 1 \\ 0 &amp; -1 &amp; 1\end{array}\right]$   $\boldsymbol{b} = \left[\begin{array}{r}1237 \\ 1941 \\ 2417 \\ 711 \\ 1177 \\ 475\end{array}\right]$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A = np.array([[<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>],[<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>],[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>],[<span class="number">-1</span>,<span class="number">1</span>,<span class="number">0</span>],[<span class="number">-1</span>,<span class="number">0</span>,<span class="number">1</span>],[<span class="number">0</span>,<span class="number">-1</span>,<span class="number">1</span>]])</span><br><span class="line">y = np.array([<span class="number">1237</span>,<span class="number">1941</span>,<span class="number">2417</span>,<span class="number">711</span>,<span class="number">1177</span>,<span class="number">475</span>])</span><br></pre></td></tr></table></figure>
+
+<p> $v_1$ = $a_1$ -  $\alpha e_1$ = $\left[\begin{array}{l}1 \\ 0 \\ 0 \\ -1\\ -1 \\ 0\end{array}\right]$ - $\sqrt{3}  * \left[\begin{array}{l}1 \ 0 \ 0 \ 0\ 0 \ 0\end{array}\right]$ = $\left[\begin{array}{l}2.7321 \\ 0 \\ 0 \\ -1\\ -1 \\ 0\end{array}\right]$ </p>
+<p>  $\alpha$  = - $sign(a1)||a_2||_2$</p>
+<p>  $$\boldsymbol{H_1}=\boldsymbol{I}-2 \frac{\boldsymbol{v_1} \boldsymbol{v_1}^{T}}{\boldsymbol{v_1}^{T} \boldsymbol{v_1}}$$<br>  $H1$ = $\left[\begin{array}{ccc}-1.7321 &amp; 0.5774 &amp; 0.5774 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \\ -1.80 &amp; 0.7887 &amp; -0.2113 \\ -1.80 &amp; -0.2113 &amp; 0.7887 \\ 0 &amp; -1 &amp; 1\end{array}\right]$  注意第一列的-1.80实际上要省略掉的<br>  $\boldsymbol{H}_{1} \boldsymbol{b}=\left[\begin{array}{r}376 \\ 1941 \\ 2417 \\ 1026 \\ 1492 \\ 475\end{array}\right]$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H = np.array(np.eye(<span class="number">6</span>) - <span class="number">2</span>*(v.dot(v.transpose())/(v.transpose().dot(v))))</span><br></pre></td></tr></table></figure>
+
+<p>$v_{2}=\left[\begin{array}{c}0 \\ 1 \\ 0 \\ 0.7887 \\ -0.2113 \\ -1\end{array}\right]-\left[\begin{array}{c}0 \\ -1.6330 \\ 0 \\ 0 \\ 0 \\ 0\end{array}\right]=\left[\begin{array}{c}0 \\ 2.6330 \\ 0 \\ 0.7887 \\ -0.2113 \\ -1\end{array}\right]$<br>注意$\alpha_2$  计算norm的时候是不算0.5774的</p>
+<p>$H_{2} H_{1} A=\left[\begin{array}{ccc}-1.7321 &amp; 0.5774 &amp; 0.5774 \\ 0 &amp; -1.6330 &amp; 0.8165 \\ 0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 0.0332 \\ 0 &amp; 0 &amp; 0.7231 \\ 0 &amp; 0 &amp; 0.6899\end{array}\right], \quad H_{2} H_{1} b=\left[\begin{array}{r}376 \\ -1200 \\ 2417 \\ 85 \\ 1744 \\ 1668\end{array}\right]$<br> 一直做下去就会得到</p>
+<p>$H_{3} H_{2} H_{1} A=\left[\begin{array}{ccc}-1.7321 &amp; 0.5774 &amp; 0.5774 \\ 0 &amp; -1.6330 &amp; 0.8165 \\ 0 &amp; 0 &amp; -1.4142 \\ 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0\end{array}\right]=\left[\begin{array}{l}R \\ O\end{array}\right]$</p>
+<p> $H_{3} H_{2} H_{1} b=\left[\begin{array}{r}376 \\ -1200 \\ -3417 \\ 5 \\ 3 \\ 1\end{array}\right]=Q^{T} b=\left[\begin{array}{l}c_{1} \\ c_{2}\end{array}\right]$</p>
+<p> 然后对$Rx=c_1$用back-subsitution就会得到<br> $x^{T}=[1236,1943,2416]$</p>
 
       
     </div>
@@ -378,7 +392,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://yoursite.com/2020/02/26/%E4%B8%8D%E5%90%8C%E7%9A%84%E8%BF%91%E4%BC%BC%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%92%8C%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" title="不同的近似优化算法的误差和时间复杂度">http://yoursite.com/2020/02/26/%E4%B8%8D%E5%90%8C%E7%9A%84%E8%BF%91%E4%BC%BC%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%92%8C%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/</a>
+    <a href="http://yoursite.com/2020/02/26/qr_factorization%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95/" title="qr_factorization 和 householder transformation解决最小二乘法">http://yoursite.com/2020/02/26/qr_factorization%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -393,7 +407,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+            <a href="/tags/%E7%BB%9F%E8%AE%A1/" rel="tag"># 统计</a>
           
             <a href="/tags/%E8%AF%81%E6%98%8E/" rel="tag"># 证明</a>
           
@@ -408,8 +422,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/26/%E5%8F%82%E6%95%B0%E6%9C%89%E5%85%B3%E7%9A%84%E4%B8%89%E5%A4%A7%E6%A3%80%E6%B5%8B/" rel="next" title="参数有关的三大检测">
-                <i class="fa fa-chevron-left"></i> 参数有关的三大检测
+              <a href="/2020/02/26/%E4%BC%B0%E8%AE%A1%E5%99%A8%E7%9A%84%E6%80%A7%E8%B4%A8%E5%92%8C%E5%85%8B%E6%8B%89%E7%BE%8E-%E7%BD%97%E4%B8%8B%E7%95%8C/" rel="next" title="估计器的性质和克拉美-罗下界(第一篇MD包含LATEX的文章)">
+                <i class="fa fa-chevron-left"></i> 估计器的性质和克拉美-罗下界(第一篇MD包含LATEX的文章)
               </a>
             
           </div>
@@ -418,8 +432,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/02/26/%E4%BC%B0%E8%AE%A1%E5%99%A8%E7%9A%84%E6%80%A7%E8%B4%A8%E5%92%8C%E5%85%8B%E6%8B%89%E7%BE%8E-%E7%BD%97%E4%B8%8B%E7%95%8C/" rel="prev" title="估计器的性质和克拉美-罗下界(第一篇MD包含LATEX的文章)">
-                估计器的性质和克拉美-罗下界(第一篇MD包含LATEX的文章) <i class="fa fa-chevron-right"></i>
+              <a href="/2020/02/26/decision-tree/" rel="prev" title="decision-tree">
+                decision-tree <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -472,8 +486,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -550,6 +573,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Least-Squares-Problems-by-QR-Factorization"><span class="nav-number">1.</span> <span class="nav-text">Least-Squares Problems by QR Factorization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#QR-Factorization"><span class="nav-number">1.1.</span> <span class="nav-text">QR Factorization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QR-Factorization-by-Householder-Matrices"><span class="nav-number">1.2.</span> <span class="nav-text">QR Factorization by Householder Matrices</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
